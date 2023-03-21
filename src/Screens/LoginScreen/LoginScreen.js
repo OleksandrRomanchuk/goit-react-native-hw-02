@@ -1,7 +1,7 @@
 import LoginForm from "../../module/LoginForm/LoginForm";
-import { ImageBackground, View } from "react-native";
+import { View } from "react-native";
 
-import { container, bgImage } from "./LoginScreenStyles";
+import { container } from "./LoginScreenStyles";
 
 const LoginScreen = () => {
   const onFormSubmit = (userCredentials) => {
@@ -10,12 +10,7 @@ const LoginScreen = () => {
 
   return (
     <View style={container}>
-      <ImageBackground
-        source={require("../../img/authBackground.jpg")}
-        style={bgImage}
-      >
-        <LoginForm onFormSubmit={onFormSubmit} />
-      </ImageBackground>
+      <LoginForm onFormSubmit={onFormSubmit} />
     </View>
   );
 };
