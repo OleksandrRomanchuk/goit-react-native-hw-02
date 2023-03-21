@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   formContainer: {
     width: "100%",
+    marginTop: "auto",
     paddingHorizontal: 16,
     paddingTop: 92,
     paddingBottom: 78,
@@ -59,37 +60,10 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 32,
   },
-  inputWrapper: {
-    marginTop: 16,
-  },
-  input: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-
-    fontSize: 16,
-
-    backgroundColor: "#F6F6F6",
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
-    borderRadius: 8,
-  },
-  inputPositioning: {
-    position: "relative",
-  },
-  showPassBtn: {
-    position: "absolute",
-    top: 19,
-    right: 16,
-  },
-  showPassBtnTxt: {
-    fontSize: 16,
-    color: "#1B4371",
-    lineHeight: 19,
-  },
   submitBtn: {
     marginTop: 43,
     paddingHorizontal: 32,
-    paddingVertical: 16,
+    paddingVertical: 12,
 
     backgroundColor: "#FF6C00",
     borderWidth: 1,
@@ -100,7 +74,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
-    lineHeight: 19,
   },
   loginText: {
     marginTop: 16,
@@ -119,11 +92,6 @@ export const {
   avatar,
   avatarAddBtn,
   form,
-  inputWrapper,
-  input,
-  inputPositioning,
-  showPassBtn,
-  showPassBtnTxt,
   submitBtn,
   submitBtnText,
   loginText,
