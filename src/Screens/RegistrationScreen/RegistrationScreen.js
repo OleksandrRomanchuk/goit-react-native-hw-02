@@ -1,7 +1,7 @@
 import RegisterForm from "../../module/RegisterForm/RegisterForm";
-import { ImageBackground, View } from "react-native";
+import { View } from "react-native";
 
-import { container, bgImage } from "./RegistrationScreenStyles";
+import { container } from "./RegistrationScreenStyles";
 
 const RegistrationScreen = () => {
   const onFormSubmit = (userCredentials) => {
@@ -10,12 +10,7 @@ const RegistrationScreen = () => {
 
   return (
     <View style={container}>
-      <ImageBackground
-        source={require("../../img/authBackground.jpg")}
-        style={bgImage}
-      >
-        <RegisterForm onFormSubmit={onFormSubmit} />
-      </ImageBackground>
+      <RegisterForm onFormSubmit={onFormSubmit} />
     </View>
   );
 };
