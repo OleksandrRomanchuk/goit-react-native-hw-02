@@ -2,8 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import RegistrationScreen from "./src/Screens/RegistrationScreen/RegistrationScreen";
-import LoginScreen from "./src/Screens/LoginScreen/LoginScreen";
+import AuthLayout from "./src/layouts/AuthLayout/AuthLayout";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,8 +17,7 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <RegistrationScreen />
-        {/* <LoginScreen /> */}
+        <AuthLayout />
         <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
