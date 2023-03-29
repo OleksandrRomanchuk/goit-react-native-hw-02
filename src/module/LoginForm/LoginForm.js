@@ -1,10 +1,10 @@
 import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
 import {
-  KeyboardAvoidingView,
   View,
   Text,
   TouchableOpacity,
-  Platform,
+  TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import { useState } from "react";
@@ -13,13 +13,12 @@ import { initialCredentials } from "./initialCredentials";
 import {
   formContainer,
   formTitle,
-  form,
-  submitBtn,
-  submitBtnText,
+  navBtn,
   loginText,
+  link,
 } from "./LoginFormStyles";
 
-const LoginForm = ({ onFormSubmit }) => {
+const LoginForm = ({ onFormSubmit, navigation }) => {
   const [userCredentials, setUserCredentials] = useState(initialCredentials);
 
   const onInputChange = (value) => {
@@ -39,10 +38,7 @@ const LoginForm = ({ onFormSubmit }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={form}
-    >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={formContainer}>
         <Text style={formTitle}>Увійти</Text>
         <Input
@@ -59,12 +55,19 @@ const LoginForm = ({ onFormSubmit }) => {
           value={userCredentials.password}
           placeholder="Пароль"
         />
-        <TouchableOpacity onPress={formSubmitHandler} style={submitBtn}>
-          <Text style={submitBtnText}>Увійти</Text>
-        </TouchableOpacity>
-        <Text style={loginText}>Немає акаунту? Зареєструватись</Text>
+        <Button
+          title="Увійти"
+          pressHandler={formSubmitHandler}
+          activeBtn={true}
+        />
+        <View style={navBtn}>
+          <Text style={loginText}>Немає акаунту? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={link}>Зареєструватись</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
