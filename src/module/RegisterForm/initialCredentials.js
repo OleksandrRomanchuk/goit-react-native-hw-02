@@ -1,5 +1,5 @@
 export const initialCredentials = {
-  login: "",
+  name: "",
   email: "",
   password: "",
 };
