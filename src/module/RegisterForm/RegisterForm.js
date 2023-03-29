@@ -1,12 +1,11 @@
-import CrossIcon from "../../img/svg/CrossIcon";
+import Avatar from "../../components/Avatar/Avatar";
 import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
 import {
-  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   View,
   Text,
-  Image,
   TouchableOpacity,
-  Platform,
   Keyboard,
 } from "react-native";
 import { useState } from "react";
@@ -15,17 +14,12 @@ import { initialCredentials } from "./initialCredentials";
 import {
   formContainer,
   formTitle,
-  avatarWrapper,
-  avatar,
-  avatarBG,
-  avatarAddBtn,
-  form,
-  submitBtn,
-  submitBtnText,
+  link,
+  navBtn,
   loginText,
 } from "./RegisterFormStyles";
 
-const RegisterForm = ({ onFormSubmit }) => {
+const RegisterForm = ({ onFormSubmit, navigation }) => {
   const [isAvatarShown, setIsAvatarShown] = useState(false);
   const [userCredentials, setUserCredentials] = useState(initialCredentials);
 
@@ -43,39 +37,27 @@ const RegisterForm = ({ onFormSubmit }) => {
     if (
       !userCredentials.email ||
       !userCredentials.password ||
-      !userCredentials.login
+      !userCredentials.name
     ) {
       alert("All fields must be filled.");
       return;
     }
 
-    if (userCredentials.login) setIsAvatarShown(false);
+    if (userCredentials.name) setIsAvatarShown(false);
 
     onFormSubmit(userCredentials);
     setUserCredentials(initialCredentials);
   };
 
   return (
-    <View style={formContainer}>
-      <Text style={formTitle}>Реєстрація</Text>
-      <View style={avatarWrapper}>
-        <View style={avatarBG}>
-          {isAvatarShown && (
-            <Image style={avatar} source={require("../../img/userImage.jpg")} />
-          )}
-          <TouchableOpacity onPress={() => avatarToggle()} style={avatarAddBtn}>
-            <CrossIcon isAvatarShown={isAvatarShown} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={form}
-      >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={formContainer}>
+        <Text style={formTitle}>Реєстрація</Text>
+        <Avatar isAvatarShown={isAvatarShown} avatarToggle={avatarToggle} />
         <Input
-          name="login"
+          name="name"
           onInputChange={onInputChange}
-          value={userCredentials.login}
+          value={userCredentials.name}
           inputMode="text"
           placeholder="Логін"
         />
@@ -93,12 +75,19 @@ const RegisterForm = ({ onFormSubmit }) => {
           value={userCredentials.password}
           placeholder="Пароль"
         />
-        <TouchableOpacity onPress={formSubmitHandler} style={submitBtn}>
-          <Text style={submitBtnText}>Зареєструватись</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-      <Text style={loginText}>Вже є акаунт? Увійти</Text>
-    </View>
+        <Button
+          title="Зареєструватись"
+          pressHandler={formSubmitHandler}
+          activeBtn={true}
+        />
+        <View style={navBtn}>
+          <Text style={loginText}>Вже є акаунт? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
+            <Text style={link}>Увійти</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

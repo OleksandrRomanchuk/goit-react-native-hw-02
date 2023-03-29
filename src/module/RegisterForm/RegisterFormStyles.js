@@ -2,8 +2,6 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   formContainer: {
-    width: "100%",
-    marginTop: "auto",
     paddingHorizontal: 16,
     paddingTop: 92,
     paddingBottom: 78,
@@ -21,78 +19,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 0.16,
   },
-  avatarWrapper: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    transform: [{ translateY: -60 }],
+  navBtn: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-  },
-  avatarBG: {
-    position: "relative",
-
-    minWidth: 120,
-    minHeight: 120,
-
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-  },
-  avatar: {
-    borderRadius: 16,
-  },
-  avatarAddBtn: {
-    position: "absolute",
-    bottom: 14,
-    right: -13,
-
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-
-    width: 25,
-    height: 25,
-
-    backgroundColor: "#fff",
-    borderRadius: 13,
-  },
-  form: {
-    marginTop: 32,
-  },
-  submitBtn: {
-    marginTop: 43,
-    paddingHorizontal: 32,
-    paddingVertical: 12,
-
-    backgroundColor: "#FF6C00",
-    borderWidth: 1,
-    borderColor: "#FF6C00",
-    borderRadius: 100,
-  },
-  submitBtnText: {
-    fontSize: 16,
-    color: "#fff",
-    textAlign: "center",
+    marginTop: 16,
   },
   loginText: {
-    marginTop: 16,
-
     fontSize: 16,
     color: "#1B4371",
     textAlign: "center",
   },
+  link: {
+    fontSize: 16,
+    color: "#1B4371",
+  },
 });
 
-export const {
-  formContainer,
-  formTitle,
-  avatarWrapper,
-  avatarBG,
-  avatar,
-  avatarAddBtn,
-  form,
-  submitBtn,
-  submitBtnText,
-  loginText,
-} = styles;
+export const { formContainer, formTitle, link, loginText, navBtn } = styles;
