@@ -13,60 +13,17 @@ const MainStack = createStackNavigator();
 const RoutesStack = () => {
   return (
     <NavigationContainer>
-      <MainStack.Navigator>
-        <MainStack.Screen
-          name="SignUp"
-          component={RegistrationScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="LogIn"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+      <MainStack.Navigator screenOptions={{ headerShown: false }}>
+        <MainStack.Screen name="SignUp" component={RegistrationScreen} />
+        <MainStack.Screen name="LogIn" component={LoginScreen} />
+        <MainStack.Screen name="Home" component={HomeScreen} />
         <MainStack.Screen
           name="CreatePostsScreen"
           component={CreatePostsScreen}
-          options={{
-            title: "Створити публікацію",
-            headerShown: false,
-          }}
         />
-        <MainStack.Screen
-          name="ProfileScreen"
-          component={ProfileScreen}
-          options={{
-            title: "Профіль",
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="CommentsScreen"
-          component={CommentsScreen}
-          options={{
-            title: "Коментарі",
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="MapScreen"
-          component={MapScreen}
-          options={{
-            title: "Локація",
-            headerShown: false,
-          }}
-        />
+        <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <MainStack.Screen name="CommentsScreen" component={CommentsScreen} />
+        <MainStack.Screen name="MapScreen" component={MapScreen} />
       </MainStack.Navigator>
     </NavigationContainer>
   );
