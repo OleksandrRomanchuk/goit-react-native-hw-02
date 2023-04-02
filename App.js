@@ -1,7 +1,9 @@
+import * as Location from "expo-location";
 import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/store";
 import RoutesStack from "./src/RoutesStack";
+import { useEffect } from "react";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -10,11 +12,20 @@ export default function App() {
     "Roboto-Regular": require("./src/img/fonts/Roboto/Roboto-Regular.ttf"),
   });
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+    })();
+  }, []);
+
   if (!fontsLoaded) {
     return null;
   }
 
-  
   return (
     <Provider store={store}>
       <RoutesStack />
