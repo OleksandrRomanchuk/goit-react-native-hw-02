@@ -12,17 +12,20 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 32,
   },
+  cameraWrapper: { borderRadius: 8, overflow: "hidden" },
   imageWrapper: {
     position: "relative",
-    minWidth: "100%",
     height: 240,
 
     justifyContent: "center",
     alignItems: "center",
 
-    backgroundColor: "#F6F6F6",
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
+    borderRadius: 8,
+  },
+  image: {
+    width: "100%",
+    height: 240,
+
     borderRadius: 8,
   },
   addImageBtn: {
@@ -81,7 +84,9 @@ const styles = StyleSheet.create({
 export const {
   container,
   contentWrapper,
+  cameraWrapper,
   imageWrapper,
+  image,
   addImageBtn,
   imageText,
   inputsWrapper,
