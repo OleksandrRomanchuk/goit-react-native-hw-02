@@ -1,3 +1,4 @@
+import * as Location from "expo-location";
 import MessageIcon from "../../img/svg/MessageIcon";
 import ThumbsUpIcon from "../../img/svg/ThumbsUpIcon";
 import MapIcon from "../../img/svg/MapIcon";
@@ -16,7 +17,7 @@ import {
 } from "./PostStyles";
 
 const Post = ({
-  post: { id, image, name, likesCount, location },
+  post: { id, image, name, likesCount },
   commentsCount,
   navigation,
   route,
@@ -26,6 +27,11 @@ const Post = ({
   const messagePressHandler = (id) => {
     dispatch(setCurrentPostId(id));
     navigation.navigate("CommentsScreen");
+  };
+
+  const mapPressHandler = (id) => {
+    dispatch(setCurrentPostId(id));
+    navigation.navigate("MapScreen");
   };
 
   return (
@@ -54,10 +60,14 @@ const Post = ({
           )}
         </View>
         <View style={infoWrapper}>
-          <TouchableOpacity onPress={() => navigation.navigate("MapScreen")}>
+          <TouchableOpacity onPress={() => mapPressHandler(id)}>
             <MapIcon />
           </TouchableOpacity>
-          <Text style={locationText}>{location}</Text>
+          <Text style={locationText}>
+            {route.name === "ProfileScreen"
+              ? `${image.country}`
+              : `${image.region}, ${image.country}`}
+          </Text>
         </View>
       </View>
     </View>
