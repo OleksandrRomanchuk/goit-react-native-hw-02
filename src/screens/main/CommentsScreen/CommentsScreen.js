@@ -2,7 +2,7 @@ import MainView from "../../../module/MainView/MainView";
 import UpArrowIcon from "../../../img/svg/UpArrowIcon";
 import PostImage from "../../../components/PostImage/PostImage";
 import Comment from "../../../components/Comment/Comment";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectPosts,
@@ -30,14 +30,8 @@ const CommentsScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const currentPostId = useSelector(selectCurrentPostId);
   const { posts } = useSelector(selectPosts);
-  const [currentPost, setCurrentPost] = useState(null);
+  const currentPost = posts.find((post) => post.id === currentPostId);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const post = posts.find((post) => post.id === currentPostId);
-
-    setCurrentPost(post);
-  }, [posts, currentPostId]);
 
   const pushBtnPressHandler = () => {
     if (!message) {
