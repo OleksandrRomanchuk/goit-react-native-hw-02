@@ -52,8 +52,13 @@ const ProfileScreen = ({ route, navigation }) => {
           }}
         />
       </View>
-      <ScrollView contentContainerStyle={scrollContainer}>
-        <View style={container}>
+      <ScrollView
+        contentContainerStyle={[
+          scrollContainer,
+          posts.length < 2 && { flex: 1 },
+        ]}
+      >
+        <View style={[container, posts.length < 2 && { flex: 1 }]}>
           <View style={avatarWrapper}>
             <Avatar isAvatarShown={isAvatarShown} avatarToggle={avatarToggle} />
             <TouchableOpacity
