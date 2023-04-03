@@ -29,9 +29,8 @@ const Post = ({
     navigation.navigate("CommentsScreen");
   };
 
-  const mapPressHandler = (id) => {
-    dispatch(setCurrentPostId(id));
-    navigation.navigate("MapScreen");
+  const mapPressHandler = () => {
+    navigation.navigate("MapScreen", image.coordinates);
   };
 
   return (
