@@ -5,8 +5,8 @@ import LogOutIcon from "../../../img/svg/LogOutIcon";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectPosts } from "../../../redux/posts/postsSelectors";
-import { selectUser } from "../../../redux/auth/authSelectors";
-import { logOutUser } from "../../../redux/auth/authSlice";
+import { selectUser, selectUID } from "../../../redux/auth/authSelectors";
+import { logOut } from "../../../redux/auth/authOperations";
 import {
   ImageBackground,
   ScrollView,
@@ -26,14 +26,13 @@ import {
 const ProfileScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const uid = useSelector(selectUID);
   const { posts } = useSelector(selectPosts);
   const [isAvatarShown, setIsAvatarShown] = useState(true);
-
-  if (!user) return;
+  const userPosts = posts.filter((post) => post.userId === uid);
 
   const logoutBtnPressHandler = () => {
-    navigation.navigate("SignUp");
-    dispatch(logOutUser());
+    dispatch(logOut());
   };
 
   const avatarToggle = () => {
@@ -55,10 +54,10 @@ const ProfileScreen = ({ route, navigation }) => {
       <ScrollView
         contentContainerStyle={[
           scrollContainer,
-          posts.length < 2 && { flex: 1 },
+          userPosts.length < 2 && { flex: 1 },
         ]}
       >
-        <View style={[container, posts.length < 2 && { flex: 1 }]}>
+        <View style={[container, userPosts.length < 2 && { flex: 1 }]}>
           <View style={avatarWrapper}>
             <Avatar isAvatarShown={isAvatarShown} avatarToggle={avatarToggle} />
             <TouchableOpacity
@@ -69,7 +68,7 @@ const ProfileScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
           <Text style={userName}>{user.name}</Text>
-          {posts.map((post) => (
+          {userPosts.map((post) => (
             <Post
               key={post.id}
               post={post}
