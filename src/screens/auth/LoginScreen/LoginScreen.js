@@ -8,7 +8,6 @@ const LoginScreen = ({ navigation }) => {
 
   const onFormSubmit = (userCredentials) => {
     dispatch(logIn(userCredentials));
-    navigation.navigate("Home");
   };
 
   return (
