@@ -1,4 +1,7 @@
 import { View, Text, Image } from "react-native";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSelectors";
+import { transformDate } from "../../helpers/transformDateFunc";
 
 import {
   container,
@@ -9,7 +12,8 @@ import {
 } from "./CommentStyles";
 
 const Comment = ({ comment }) => {
-  const isUserAuthor = comment.author === "user" ? true : false;
+  const { name } = useSelector(selectUser);
+  const isUserAuthor = comment.author === name ? true : false;
 
   return (
     <View style={[container, isUserAuthor && { flexDirection: "row-reverse" }]}>
@@ -29,7 +33,7 @@ const Comment = ({ comment }) => {
       >
         <Text style={message}>{comment.message}</Text>
         <Text style={[date, isUserAuthor && { textAlign: "left" }]}>
-          09 червня, 2020 | 08:40
+          {transformDate(comment.addedOn)}
         </Text>
       </View>
     </View>
