@@ -1,9 +1,11 @@
 import MainView from "../../../module/MainView/MainView";
 import Post from "../../../components/Post/Post";
 import { View, ScrollView, Text, Image } from "react-native";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../redux/auth/authSelectors";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, selectUID } from "../../../redux/auth/authSelectors";
 import { selectPosts } from "../../../redux/posts/postsSelectors";
+import { useEffect } from "react";
+import { fetchAllPosts } from "../../../redux/posts/postsOperations";
 import {
   container,
   avatarWrapper,
@@ -13,8 +15,14 @@ import {
 } from "./PostsScreenStyles";
 
 const PostsScreen = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const uid = useSelector(selectUID);
   const { posts } = useSelector(selectPosts);
+
+  useEffect(() => {
+    dispatch(fetchAllPosts(uid));
+  }, [uid]);
 
   if (!user) return;
 
