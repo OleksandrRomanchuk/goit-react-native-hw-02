@@ -4,12 +4,13 @@ import MapIcon from "../../../img/svg/MapIcon";
 import TrashIcon from "../../../img/svg/TrashIcon";
 import CameraActiveBtn from "../../../components/CameraActiveBtn/CameraActiveBtn";
 import Button from "../../../components/Button/Button";
+import uuid from "react-native-uuid";
 import { View, Image, TouchableOpacity, Text, TextInput } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { initialValues } from "./initialsValues";
-import { useDispatch } from "react-redux";
-import { addPost } from "../../../redux/posts/postsSlice";
-import { getRandomInt } from "../../../helpers/randomNumberFunc";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUID } from "../../../redux/auth/authSelectors";
+import { addPost } from "../../../redux/posts/postsOperations";
 import { Camera } from "expo-camera";
 
 import {
@@ -30,32 +31,46 @@ import {
 
 const CreatePostsScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  const uid = useSelector(selectUID);
   const [post, setPost] = useState(initialValues);
   const activeBtn = Boolean(post.image && post.name && post.location);
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState("");
+
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const location = await Location.getCurrentPositionAsync({});
+        const coordinates = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        const locationRegion = await Location.reverseGeocodeAsync(coordinates);
+        const region = locationRegion[0].region;
+        const country = locationRegion[0].country;
+
+        setPost((state) => ({
+          ...state,
+          location: { coordinates, region, country },
+        }));
+      } catch (error) {
+        console.log('error: ', error,message);
+      }
+    };
+
+    getLocation();
+  }, []);
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync({});
-    const coordinates = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    const locationRegion = await Location.reverseGeocodeAsync(coordinates);
-    const region = locationRegion[0].region;
-    const country = locationRegion[0].country;
 
-    setPhoto(photo.uri);
     setPost((state) => ({
       ...state,
-      image: { uri: photo.uri, coordinates, region, country },
+      image: photo.uri,
     }));
   };
 
   const onChangePhoto = () => {
-    setPhoto("");
-    setPost((state) => ({ ...state, image: "" }));
+    setPost((state) => ({ ...state, image: "", location: null }));
   };
 
   const onInputChange = (value) => {
@@ -65,10 +80,9 @@ const CreatePostsScreen = ({ route, navigation }) => {
   const formSubmitHandler = () => {
     const newPost = {
       ...post,
-      id: getRandomInt(5, 10000000),
+      id: uuid.v4(8),
     };
-
-    dispatch(addPost(newPost));
+    dispatch(addPost({ uid, newPost }));
     navigation.navigate("Home");
   };
 
@@ -77,26 +91,29 @@ const CreatePostsScreen = ({ route, navigation }) => {
       <View style={container}>
         <View style={contentWrapper}>
           <View>
-            {!photo && (
+            {!post.image && (
               <View style={cameraWrapper}>
                 <Camera ref={setCamera} style={imageWrapper}>
-                  <CameraActiveBtn pressHandler={takePhoto} isActive={photo} />
+                  <CameraActiveBtn
+                    pressHandler={takePhoto}
+                    isActive={post.image}
+                  />
                 </Camera>
               </View>
             )}
-            {photo && (
+            {post.image && (
               <View style={imageWrapper}>
-                <Image style={image} source={{ uri: photo }} />
+                <Image style={image} source={{ uri: post.image }} />
                 <View style={{ position: "absolute" }}>
                   <CameraActiveBtn
                     pressHandler={onChangePhoto}
-                    isActive={photo}
+                    isActive={post.image}
                   />
                 </View>
               </View>
             )}
             <Text style={imageText}>
-              {photo ? "Редагувати фото" : "Завантажте фото"}
+              {post.image ? "Редагувати фото" : "Завантажте фото"}
             </Text>
           </View>
           <View style={inputsWrapper}>
@@ -114,8 +131,12 @@ const CreatePostsScreen = ({ route, navigation }) => {
                 style={[input, locationInput]}
                 placeholder="Локація..."
                 placeholderTextColor="#BDBDBD"
-                value={post.location}
-                onChangeText={(value) => onInputChange({ location: value })}
+                value={
+                  post.location
+                    ? `${post.location.region}, ${post.location.country}`
+                    : ""
+                }
+                editable={false}
               />
               <TouchableOpacity
                 style={inputIcon}
