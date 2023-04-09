@@ -5,56 +5,88 @@ import {
   updateProfile,
   signOut,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
-const register = createAsyncThunk("auth/registerUser", async (credentials) => {
-  const { name, email, password } = credentials;
+const register = createAsyncThunk(
+  "auth/registerUser",
+  async (credentials, { rejectWithValue }) => {
+    const { name, email, password } = credentials;
 
-  try {
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-    if (!response.user.displayName) {
-      await updateProfile(auth.currentUser, { displayName: name });
+      if (!response.user.displayName) {
+        await updateProfile(auth.currentUser, { displayName: name });
+      }
+
+      const credentials = {
+        user: { name: response.user.displayName, email: response.user.email },
+        uid: response.user.uid,
+      };
+
+      return credentials;
+    } catch (error) {
+      console.log(error.message);
+      return rejectWithValue(error.message);
     }
-
-    const credentials = {
-      user: { name: response.user.displayName, email: response.user.email },
-      uid: response.user.uid,
-    };
-
-    return credentials;
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
-const logIn = createAsyncThunk("auth/logInUser", async (credentials) => {
-  const { email, password } = credentials;
+const logIn = createAsyncThunk(
+  "auth/logInUser",
+  async (credentials, { rejectWithValue }) => {
+    const { email, password } = credentials;
 
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+
+      const credentials = {
+        user: { name: response.user.displayName, email: response.user.email },
+        uid: response.user.uid,
+      };
+
+      return credentials;
+    } catch (error) {
+      console.log(error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const logOut = createAsyncThunk(
+  "auth/logOutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const checkUser = () => async (dispatch, _) => {
   try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
+    onAuthStateChanged(auth, (user) => {
+      console.log("user: ", user);
+      if (!user) return;
 
-    const credentials = {
-      user: { name: response.user.displayName, email: response.user.email },
-      uid: response.user.uid,
-    };
+      const credentials = {
+        user: { name: user.displayName, email: user.email },
+        uid: user.uid,
+      };
 
-    return credentials;
+      dispatch(logIn(credentials));
+    });
   } catch (error) {
-    console.log("error: ", error);
+    console.log(error.message);
+    return rejectWithValue(error.message);
   }
-});
+};
 
-const logOut = createAsyncThunk("auth/logOutUser", async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.log("error: ", error);
-  }
-});
-
-export { register, logIn, logOut };
+export { register, logIn, logOut, checkUser };
