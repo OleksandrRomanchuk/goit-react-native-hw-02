@@ -8,7 +8,6 @@ const RegistrationScreen = ({ navigation }) => {
 
   const onFormSubmit = (userCredentials) => {
     dispatch(register(userCredentials));
-    navigation.navigate("Home");
   };
 
   return (
