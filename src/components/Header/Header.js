@@ -11,7 +11,6 @@ const MainHeader = ({ title, route, navigation }) => {
 
   const logoutBtnPressHandler = () => {
     dispatch(logOut());
-    navigation.navigate("SignUp");
   };
 
   return (
