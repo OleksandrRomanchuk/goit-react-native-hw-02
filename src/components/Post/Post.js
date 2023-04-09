@@ -1,11 +1,11 @@
-import * as Location from "expo-location";
 import MessageIcon from "../../img/svg/MessageIcon";
 import ThumbsUpIcon from "../../img/svg/ThumbsUpIcon";
 import MapIcon from "../../img/svg/MapIcon";
 import PostImage from "../PostImage/PostImage";
 import { View, TouchableOpacity, Text } from "react-native";
-import { useDispatch } from "react-redux";
-import { setCurrentPostId, addLike } from "../../redux/posts/postsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addLike } from "../../redux/posts/postsOperations";
+import { selectUID } from "../../redux/auth/authSelectors";
 
 import {
   title,
@@ -17,20 +17,19 @@ import {
 } from "./PostStyles";
 
 const Post = ({
-  post: { id, image, name, likesCount },
-  commentsCount,
+  post: { id, image, name, likesCount, location, comments },
   navigation,
   route,
 }) => {
   const dispatch = useDispatch();
+  const uid = useSelector(selectUID);
 
   const messagePressHandler = (id) => {
-    dispatch(setCurrentPostId(id));
-    navigation.navigate("CommentsScreen");
+    navigation.navigate("CommentsScreen", id);
   };
 
   const mapPressHandler = () => {
-    navigation.navigate("MapScreen", image.coordinates);
+    navigation.navigate("MapScreen", location.coordinates);
   };
 
   return (
@@ -41,15 +40,15 @@ const Post = ({
         <View style={positioning}>
           <View style={infoWrapper}>
             <TouchableOpacity onPress={() => messagePressHandler(id)}>
-              <MessageIcon commentsCount={commentsCount} />
+              <MessageIcon commentsCount={comments.length} />
             </TouchableOpacity>
-            <Text style={[counts, !commentsCount && { color: "#BDBDBD" }]}>
-              {commentsCount}
+            <Text style={[counts, !comments.length && { color: "#BDBDBD" }]}>
+              {comments.length}
             </Text>
           </View>
           {route.name === "ProfileScreen" && (
             <View style={infoWrapper}>
-              <TouchableOpacity onPress={() => dispatch(addLike(id))}>
+              <TouchableOpacity onPress={() => dispatch(addLike({ uid, id }))}>
                 <ThumbsUpIcon likesCount={likesCount} />
               </TouchableOpacity>
               <Text style={[counts, !likesCount && { color: "#BDBDBD" }]}>
@@ -64,8 +63,8 @@ const Post = ({
           </TouchableOpacity>
           <Text style={locationText}>
             {route.name === "ProfileScreen"
-              ? `${image.country}`
-              : `${image.region}, ${image.country}`}
+              ? `${location.country}`
+              : `${location.region}, ${location.country}`}
           </Text>
         </View>
       </View>
