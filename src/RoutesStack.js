@@ -12,24 +12,24 @@ const RoutesStack = () => {
   const stateChange = useSelector(selectStateChanged);
   const routing = useRoute(stateChange);
 
-  useEffect(() => {
-    dispatch(checkUser());
-  }, []);
-
   // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     console.log("user: ", user);
-  //     if (!user) return;
+  //   dispatch(checkUser());
+  // }, []);
 
-  //     const credentials = {
-  //       user: { name: user.displayName, email: user.email },
-  //       uid: user.uid,
-  //     };
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("user: ", user);
+      if (!user) return;
 
-  //     console.log(credentials);
-  //     dispatch(logIn(credentials));
-  //   });
-  // }, [dispatch]);
+      const credentials = {
+        user: { name: user.displayName, email: user.email },
+        uid: user.uid,
+      };
+
+      console.log(credentials);
+      dispatch(logIn(credentials));
+    });
+  }, [dispatch]);
 
   return <NavigationContainer>{routing}</NavigationContainer>;
 };

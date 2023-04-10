@@ -31,7 +31,7 @@ const register = createAsyncThunk(
 
       return credentials;
     } catch (error) {
-      console.log(error.message);
+      console.log("1: ", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -52,7 +52,7 @@ const logIn = createAsyncThunk(
 
       return credentials;
     } catch (error) {
-      console.log(error.message);
+      console.log("2: ", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -64,7 +64,7 @@ const logOut = createAsyncThunk(
     try {
       await signOut(auth);
     } catch (error) {
-      console.log(error.message);
+      console.log("3: ", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -73,7 +73,6 @@ const logOut = createAsyncThunk(
 const checkUser = () => async (dispatch, _) => {
   try {
     onAuthStateChanged(auth, (user) => {
-      console.log("user: ", user);
       if (!user) return;
 
       const credentials = {
@@ -84,7 +83,7 @@ const checkUser = () => async (dispatch, _) => {
       dispatch(logIn(credentials));
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("4: ", error.message);
     return rejectWithValue(error.message);
   }
 };
